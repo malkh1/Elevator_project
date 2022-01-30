@@ -1,8 +1,14 @@
 # Group 3 Elevator project 
 
-## 👥 Authors 
+## 👥 AUTHORS 
 Mohammed Alkhaledi
 
 Sara Shikhhassan
 
 James Anderson
+
+### 🚀 HOW TO LAUNCH THE APPLICATION
+
+
+### 📄 GENERAL USAGE NOTES
+
