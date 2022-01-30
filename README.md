@@ -7,7 +7,7 @@ Sara Shikhhassan
 
 James Anderson
 
-### 🚀 HOW TO LAUNCH THE APPLICATION
+### 🚀 LAUNCHING THE APPLICATION
 
 
 ### 📄 GENERAL USAGE NOTES
