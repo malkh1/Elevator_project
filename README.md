@@ -1,1 +1,3 @@
-# Group3 Elevator project
+# Group 3 Elevator project 
+
+## 👥 Authors 
