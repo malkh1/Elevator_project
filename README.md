@@ -7,6 +7,9 @@ Sara Shikhhassan, 101142208
 
 James Anderson, 101147068
 
+Marina Latif, 101149148
+
+
 ### 🚀 LAUNCHING THE APPLICATION
 
 
