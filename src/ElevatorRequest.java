@@ -36,7 +36,7 @@ public class ElevatorRequest implements RequestEvent{
 
     /**
      * Getter method of the time attribute
-     * @return the time in the format 3:45.30
+     * @return the time in the format 13:45.30
      */
     @Override
     public LocalTime getTime() {
