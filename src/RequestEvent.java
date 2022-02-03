@@ -3,7 +3,6 @@ import java.time.LocalTime;
 /**
  * An interface that wraps all events
  * @author sarashikhhassan
- * @version 1.0 (iteration 1)
  */
 public interface RequestEvent {
     LocalTime getTime(); //hour minute second 13:45.30
