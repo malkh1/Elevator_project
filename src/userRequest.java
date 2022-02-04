@@ -39,7 +39,7 @@ public class userRequest implements RequestEvent{
      */
     @Override
     public LocalTime getTime() {
-        return this.getTime();
+        return time;
     }
 
     /**

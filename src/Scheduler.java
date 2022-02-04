@@ -1,6 +1,6 @@
 /**
  * The Scheduler which is used as a communication channel from the Floor thread to the Elevator thread
- *  @author sarashikhhassan
+ *  @author sarashikhhassan, Mohammad Alkhaledi
  * @version 1.0 (iteration 1)
  */
 public class Scheduler {
@@ -15,7 +15,6 @@ public class Scheduler {
     }
 
     /**
-     *
      * @return true if a floor request is available, or not null
      */
     public boolean getFloorRequestStatus(){
@@ -23,7 +22,6 @@ public class Scheduler {
     }
 
     /**
-     *
      * @return true if an elevator request is available, or not null
      */
     public boolean getElevatorRequestStatus(){
@@ -31,7 +29,6 @@ public class Scheduler {
     }
 
     /**
-     *
      * @return elevator request
      */
     public synchronized RequestEvent getElevatorRequest() {
@@ -63,11 +60,11 @@ public class Scheduler {
         RequestEvent eventToBeReturned = floorRequest;
         floorRequest = null;
         notifyAll();
-        return floorRequest;
+        return eventToBeReturned;
     }
 
     /**
-     *
+     * signals elevator needs to pick someone up
      * @param elevatorRequest the elevator request to be added by floor
      */
     public synchronized void addElevatorRequest(RequestEvent elevatorRequest){
@@ -84,8 +81,8 @@ public class Scheduler {
     }
 
     /**
-     *
-     * @param floorRequest
+     * signals elevator reached the floor
+     * @param floorRequest the floor request to be added by the elevator
      */
     public synchronized void addFloorRequest(RequestEvent floorRequest){
         while (getFloorRequestStatus()){

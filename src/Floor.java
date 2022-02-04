@@ -7,8 +7,9 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Implements the Floor class/thread
- * @author James Anderson, 101147068
+ * Implements the Floor class/thread for sending requests
+ *  @author James Anderson, 101147068
+ * @version 1.0 (iteration 1)
  */
 
 public class Floor extends Thread {
@@ -22,8 +23,8 @@ public class Floor extends Thread {
      */
 
     public Floor(Scheduler sch) {
-        this.details = new ArrayList<RequestEvent>();
-        this.currentEvents = new ArrayList<RequestEvent>();
+        this.details = new ArrayList<>();
+        this.currentEvents = new ArrayList<>();
         this.scheduler = sch;
     }
 
@@ -33,7 +34,7 @@ public class Floor extends Thread {
      */
 
     public static ArrayList<RequestEvent> getEvents(String path) {
-        ArrayList<RequestEvent> evs = new ArrayList<RequestEvent>();
+        ArrayList<RequestEvent> evs = new ArrayList<>();
 
         try {
             BufferedReader reader = new BufferedReader(new FileReader(path));
