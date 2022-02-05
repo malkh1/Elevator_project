@@ -2,7 +2,7 @@
 /**
  * The Scheduler which is used as a communication channel from the Floor thread to the Elevator thread
  *  @author sarashikhhassan, Mohammad Alkhaledi
- * @version 1.0 (iteration 1)
+ *  @version 1.0 (iteration 1)
  */
 public class Scheduler {
     private RequestEvent floorRequest, elevatorRequest;
