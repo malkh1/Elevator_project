@@ -47,7 +47,7 @@ The elevator starts at floor 5 at 5:39pm, travels upwards to floor 6.
 - These classes are not testable as their methods are already being tested in the Scheduler.java class
 
 
-#### 🔨 BREAKDOWN OF RESPONSIBILITIES
+### 🔨 BREAKDOWN OF RESPONSIBILITIES
 Mohammed: Elevator.java class, Schedular.java class, test classes
 
 Sara: RequestEvent.java class, UserRequest.java class, Schedular.java class, README.txt file
