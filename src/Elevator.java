@@ -1,6 +1,7 @@
 /**
  * Implements the Elevator thread
  * @author Mohammad Alkhaledi
+ * @version 1.0 (iteration 1)
  */
 public class Elevator extends Thread{
     private RequestEvent elevatorRequest;
