@@ -34,7 +34,7 @@ floorStop is the final destination of the passenger
 
 
 ##### 🔨 BREAKDOWN OF RESPONSIBILITIES
-Mohammed: Elevator.java class, Schedular.java class
+Mohammed: Elevator.java class, Schedular.java class, test classes
 
 Sara: RequestEvent.java class, UserRequest.java class, Schedular.java class, README.txt file
 
