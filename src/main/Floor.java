@@ -93,7 +93,7 @@ public class Floor extends Thread {
      */
 
     public void run() {
-        details = getEvents("src\\main\\requests.txt");
+        details = getEvents("/Users/sarashikhhassan/Desktop/Iteration1/src/main/requests.txt");
 
         for (RequestEvent x : details) {
             scheduler.addElevatorRequest(x);

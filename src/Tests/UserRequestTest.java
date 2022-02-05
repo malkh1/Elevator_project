@@ -1,5 +1,6 @@
 package Tests;
 
+
 import main.UserRequest;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,18 +19,19 @@ public class UserRequestTest {
                 , true, 4);
     }
 
-    @Test
+
+	@Test
     public void getTime() {
         assertEquals(LocalTime.of(13, 45, 30), userRequest.getTime());
     }
 
-    @Test
+	@Test
     public void getCurrentFloor() {
         assertEquals(2, userRequest.getCurrentFloor());
 
     }
 
-    @Test
+	@Test
     public void floorDirection() {
         assertTrue(userRequest.floorDirection());
     }
