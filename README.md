@@ -36,10 +36,11 @@ The application should now execute
 floorDirection is the direction of the floor as "True" if moving upwards, "False" if moving downwards, floorStop is the final destination of the passenger.)
 
 Example:
-13:12:04,4,false,2
+
+13:12:04, 4, false, 2
 The elevator starts at floor 4, travels downwards to floor 2.
 
-17:39:34,5,true,6
+17:39:34, 5, true, 6
 The elevator starts at floor 5, travels upwards to floor 6.
 
 **Floor.java and Elevator.java**
