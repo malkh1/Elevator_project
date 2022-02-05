@@ -12,9 +12,15 @@ Marina Latif, 101149148
 
 ### 🚀 LAUNCHING THE APPLICATION
 To set up and launch the applicaton please follow these steps:
-
+- At the top right on the Github page, click the green button "code"
+- Choose "Download ZIP"
+- Open the ZIP, and a folder that has been downloaded will open
+- Open your favourite IDLE (set up instructions are targetted towards Eclipse)
+- 
 
 ### 📄 GENERAL USAGE NOTES
+###### requests.txt 
+Takes a 
 
 
 
