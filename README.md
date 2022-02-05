@@ -19,7 +19,7 @@ To set up and launch the applicaton please follow these steps:
 - In eclipse select File-> Open Projects from File System 
 - Select the Directory of where the project folder is located
 - Click Open then Finish
-- 
+
 **To run the application**
 
 - Navigate to the "src" folder, click on "Scheduler"
