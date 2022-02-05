@@ -11,8 +11,11 @@ Marina Latif, 101149148
 
 ### 🔨 BREAKDOWN OF RESPONSIBILITIES
 Mohammed: Elevator.java class, Schedular.java class
+
 Sara: RequestEvent.java class, UserRequest.java class, Schedular.java class, README.txt file
-James: Floor.java class
+
+James: Floor.java class, Schedular.java class
+
 Marina: UML class diagram, sequence diagram, test classes
 
 
