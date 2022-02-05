@@ -19,8 +19,15 @@ To set up and launch the applicaton please follow these steps:
 - 
 
 ### 📄 GENERAL USAGE NOTES
-###### requests.txt 
-Takes a 
+**requests.txt**
+- Takes a list of values of user inputs which is sent as requests to the elevator. 
+- Follows the format: time, currentFloor, floorDirection, floorStop
+where time is the time the request is being sent in the format "13:34:03.23"
+currentFloor is the current floor of the user 
+floorDirection is the direction of the floor as "True" if moving upwards, "False" if moving downwards
+floorStop is the final destination of the passenger
+
+
 
 
 
