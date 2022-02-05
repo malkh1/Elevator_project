@@ -23,24 +23,26 @@ To set up and launch the applicaton please follow these steps:
 - Navigate to the "src" folder, click on "Scheduler"
 - Click "Run"
 The application should now execute
-**To **
+**To run the test cases **
+- Navigate to the "tests" folder
+- Click on one of the files you want to test (i.e SchedulerTest.java)
+- Click "Run"
 
 ### 📄 GENERAL USAGE NOTES
 **requests.txt**
 - Takes a list of values of user inputs which is sent as requests to the elevator. 
 - Follows the format: time, currentFloor, floorDirection, floorStop
-where time is the time the request is being sent in the format "13:34:03.23"
-currentFloor is the current floor of the user 
-floorDirection is the direction of the floor as "True" if moving upwards, "False" if moving downwards
-floorStop is the final destination of the passenger
+(where time is the time the request is being sent in the format "13:34:03.23", currentFloor is the current floor of the user,
+floorDirection is the direction of the floor as "True" if moving upwards, "False" if moving downwards, floorStop is the final destination of the passenger.)
+
+Example:
+13:12:04,4,false,2
+The elevator starts at floor 4, travels downwards to floor 2.
+17:39:34,5,true,6
+The elevator starts at floor 5, travels upwards to floor 6.
 
 **Floor.java and Elevator.java**
 - These classes are not testable as their methods are already being tested in the Scheduler.java class
-
-
-
-
-
 
 
 ##### 🔨 BREAKDOWN OF RESPONSIBILITIES
