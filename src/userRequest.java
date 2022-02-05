@@ -2,6 +2,7 @@ import java.time.LocalTime;
 
 /**
  * The request made by a passenger in an elevator or a floor
+ * @author Sara Shikhhassan
  * @version 1.0 (iteration 1)
  */
 public class userRequest implements RequestEvent{
