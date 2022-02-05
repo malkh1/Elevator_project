@@ -13,11 +13,14 @@ Marina Latif, 101149148
 ### 🚀 LAUNCHING THE APPLICATION
 To set up and launch the applicaton please follow these steps:
 
+
 ### 📄 GENERAL USAGE NOTES
 
 
 
-#### 🔨 BREAKDOWN OF RESPONSIBILITIES
+
+
+##### 🔨 BREAKDOWN OF RESPONSIBILITIES
 Mohammed: Elevator.java class, Schedular.java class
 
 Sara: RequestEvent.java class, UserRequest.java class, Schedular.java class, README.txt file
