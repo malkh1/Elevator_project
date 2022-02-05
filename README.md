@@ -27,6 +27,9 @@ currentFloor is the current floor of the user
 floorDirection is the direction of the floor as "True" if moving upwards, "False" if moving downwards
 floorStop is the final destination of the passenger
 
+**Floor.java and Elevator.java**
+- These classes are not testable as their methods are already being tested in the Scheduler.java class
+
 
 
 
