@@ -40,6 +40,7 @@ public class SchedulerTest {
         scheduler.addElevatorRequest(userRequest);
         assertEquals(scheduler.getElevatorRequest(), userRequest);
     }
+    
     @Test
     public void getFloorRequest() {
         scheduler.addFloorRequest(userRequest);
