@@ -27,13 +27,11 @@ public class Elevator extends Thread{
         if(floorNumber != requestedFloor){
             floorNumber = goToFloor(floorNumber, requestedFloor);
         }
-        System.out.printf("Elevator %d has reached the destionation..\n", elevatorNumber);
-
-        elevatorRequest = null;
+        System.out.printf("Elevator %d has reached the destination..\n", elevatorNumber);
     }
     private int goToFloor(int currentFloor, int desiredFloor){
         while(currentFloor != desiredFloor){
-            System.out.printf("Elevator %d is at floor %d..\n", elevatorNumber, floorNumber);
+            System.out.printf("Elevator %d is at floor %d..\n", elevatorNumber, currentFloor);
             try {
                 sleep(1000);
             } catch (InterruptedException e) {

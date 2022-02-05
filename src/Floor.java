@@ -3,8 +3,6 @@ import java.util.ArrayList;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * Implements the Floor class/thread for sending requests
@@ -15,17 +13,17 @@ import java.util.List;
 public class Floor extends Thread {
 
     private Scheduler scheduler;
-    private ArrayList<RequestEvent> details;
+    public ArrayList<RequestEvent> details;
     private ArrayList<RequestEvent> currentEvents;
 
     /**
      * Floor constructor
      */
 
-    public Floor(Scheduler sch) {
+    public Floor(Scheduler scheduler) {
         this.details = new ArrayList<>();
         this.currentEvents = new ArrayList<>();
-        this.scheduler = sch;
+        this.scheduler = scheduler;
     }
 
     /**
@@ -34,26 +32,25 @@ public class Floor extends Thread {
      */
 
     public static ArrayList<RequestEvent> getEvents(String path) {
-        ArrayList<RequestEvent> evs = new ArrayList<>();
+        ArrayList<RequestEvent> events = new ArrayList<>();
 
         try {
             BufferedReader reader = new BufferedReader(new FileReader(path));
-            String l;
-            l = reader.readLine();
+            String lineInput;
+            ArrayList<String> input;
 
-            ArrayList<String> input = parseLine(l);
-
-            while (l != null) {
-                userRequest newEvent = new userRequest(LocalTime.parse(input.get(0)), Integer.parseInt(input.get(1)),
+            while ((lineInput = reader.readLine()) != null) {
+                input = parseLine(lineInput);
+                UserRequest newEvent = new UserRequest(LocalTime.parse(input.get(0)), Integer.parseInt(input.get(1)),
                         Boolean.parseBoolean(input.get(2)), Integer.parseInt(input.get(3)));
-                evs.add(newEvent);
-                l = reader.readLine();
+                events.add(newEvent);
             }
             reader.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return evs;
+
+        return events;
     }
 
     /**
@@ -63,10 +60,12 @@ public class Floor extends Thread {
 
     private static ArrayList<String> parseLine(String l) {
         String[] temp = l.split(",");
-        List<String> al;
-        al = Arrays.asList(temp);
+        ArrayList<String> al = new ArrayList<>();
+        for(String s : temp) {
+            al.add(s);
+        }
 
-        return (ArrayList<String>) al;
+        return al;
     }
 
 
@@ -91,8 +90,8 @@ public class Floor extends Thread {
      * method for executing a floor thread
      */
 
-    public synchronized void run() {
-        details = getEvents("src/test.txt"); // replace this obv
+    public void run() {
+        details = getEvents("src\\requests.txt");
 
         for (RequestEvent x : details) {
             scheduler.addElevatorRequest(x);

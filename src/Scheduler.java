@@ -1,3 +1,4 @@
+
 /**
  * The Scheduler which is used as a communication channel from the Floor thread to the Elevator thread
  *  @author sarashikhhassan, Mohammad Alkhaledi
@@ -12,19 +13,20 @@ public class Scheduler {
     public Scheduler(){
         floorRequest = null;
         elevatorRequest = null;
+
     }
 
     /**
      * @return true if a floor request is available, or not null
      */
-    public boolean getFloorRequestStatus(){
+    public boolean getFloorRequestAvailable(){
         return floorRequest != null;
     }
 
     /**
      * @return true if an elevator request is available, or not null
      */
-    public boolean getElevatorRequestStatus(){
+    public boolean getElevatorRequestAvailable(){
         return elevatorRequest != null;
     }
 
@@ -32,7 +34,8 @@ public class Scheduler {
      * @return elevator request
      */
     public synchronized RequestEvent getElevatorRequest() {
-        while (!getElevatorRequestStatus()){
+
+        while (!getElevatorRequestAvailable()){
             try {
                 wait();
             } catch (InterruptedException e) {
@@ -50,7 +53,7 @@ public class Scheduler {
      * @return the floor request added by the elevator
      */
     public synchronized RequestEvent getFloorRequest() {
-        while(!getFloorRequestStatus()){
+        while(!getFloorRequestAvailable()){
             try {
                 wait();
             } catch (InterruptedException e) {
@@ -68,14 +71,13 @@ public class Scheduler {
      * @param elevatorRequest the elevator request to be added by floor
      */
     public synchronized void addElevatorRequest(RequestEvent elevatorRequest){
-        while(getElevatorRequestStatus()){
+        while(getElevatorRequestAvailable()){
             try {
                 wait();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
-
         this.elevatorRequest = elevatorRequest;
         notifyAll();
     }
@@ -85,7 +87,7 @@ public class Scheduler {
      * @param floorRequest the floor request to be added by the elevator
      */
     public synchronized void addFloorRequest(RequestEvent floorRequest){
-        while (getFloorRequestStatus()){
+        while (getFloorRequestAvailable()){
             try {
                 wait();
             } catch (InterruptedException e) {
@@ -94,6 +96,17 @@ public class Scheduler {
         }
         this.floorRequest = floorRequest;
         notifyAll();
+    }
+
+
+    public static void main(String[] args) {
+        Scheduler scheduler = new Scheduler();
+        Floor floor = new Floor(scheduler);
+        Elevator elevator = new Elevator(scheduler);
+
+        floor.start();
+        elevator.start();
+
     }
 
 
