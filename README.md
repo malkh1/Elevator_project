@@ -26,7 +26,7 @@ To set up and launch the applicaton please follow these steps:
 - Click "Run"
 The application should now execute
 
-**To run the test cases **
+**To run the test cases**
 
 - Navigate to the "tests" folder
 - Click on one of the files you want to test (i.e SchedulerTest.java)
