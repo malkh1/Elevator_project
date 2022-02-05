@@ -15,8 +15,15 @@ To set up and launch the applicaton please follow these steps:
 - At the top right on the Github page, click the green button "code"
 - Choose "Download ZIP"
 - Open the ZIP, and a folder that has been downloaded will open
-- Open your favourite IDLE (set up instructions are targetted towards Eclipse)
-- 
+- Open your favourite IDE (set up instructions are targetted towards Eclipse)
+- In eclipse select File-> Open Projects from File System 
+- Select the Directory of where the project folder is located
+- Click Open then Finish
+**To run the application**
+- Navigate to the "src" folder, click on "Scheduler"
+- Click "Run"
+The application should now execute
+**To **
 
 ### 📄 GENERAL USAGE NOTES
 **requests.txt**
