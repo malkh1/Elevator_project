@@ -19,11 +19,15 @@ To set up and launch the applicaton please follow these steps:
 - In eclipse select File-> Open Projects from File System 
 - Select the Directory of where the project folder is located
 - Click Open then Finish
+- 
 **To run the application**
+
 - Navigate to the "src" folder, click on "Scheduler"
 - Click "Run"
 The application should now execute
+
 **To run the test cases **
+
 - Navigate to the "tests" folder
 - Click on one of the files you want to test (i.e SchedulerTest.java)
 - Click "Run"
