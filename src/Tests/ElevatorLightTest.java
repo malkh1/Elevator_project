@@ -1,6 +1,9 @@
 package Tests;
 
+import elevatorSubsystem.ElevatorLight;
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author Sara Shikhhassan
@@ -8,7 +11,7 @@ import org.junit.Test;
  */
 public class ElevatorLightTest {
     @Test
-    void lightTest() throws InterruptedException{
+    public void lightTest() throws InterruptedException{
 
         // Creating an elevator light for the floor number 5
         ElevatorLight elevatorLight = new ElevatorLight(5);
@@ -17,7 +20,7 @@ public class ElevatorLightTest {
         elevatorLight.lightOn();
 
         // Checking if the light turned on
-        assertEqual(true, elevatorLight.checkLight());
+        assertEquals(true, elevatorLight.checkLight());
 
         // Turning off the button light
         elevatorLight.lightOff();
