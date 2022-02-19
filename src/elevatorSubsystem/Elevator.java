@@ -10,18 +10,20 @@ import main.Scheduler;
  */
 public class Elevator extends Thread{
     private RequestEvent elevatorRequest;
-    private int elevatorNumber;
     private int floorNumber;
     private Scheduler scheduler;
     private ElevatorState moving;
     private ElevatorState door;
+    private int elevatorNumber;
+    private static int elevatorCount = 1;
 
     public Elevator(Scheduler scheduler){
         floorNumber = 1;
         this.scheduler = scheduler;
-        elevatorNumber = 1;
         door = ElevatorState.OPEN;
         moving = ElevatorState.STILL;
+        elevatorNumber = elevatorCount;
+        elevatorCount++;
     }
 
     /**

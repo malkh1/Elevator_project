@@ -1,3 +1,5 @@
+package elevatorSubsystem;
+
 /**
  * Class for the control panel of the elevator which controls the button switches, and the door
  * @author Sara Shikhhassan
