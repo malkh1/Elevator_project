@@ -5,8 +5,8 @@ import main.Scheduler;
 
 /**
  * Implements the Elevator thread
- * @author Mohammad Alkhaledi
- * @author James Anderson
+ * @author Mohammad Alkhaledi, James Anderson
+ * @version 2.0 (iteration 2) 
  */
 public class Elevator extends Thread{
     private RequestEvent elevatorRequest;
