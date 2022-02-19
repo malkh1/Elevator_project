@@ -10,7 +10,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 /**
  * Implements the Floor class/thread for sending requests
  *  @author James Anderson, 101147068
- * @version 1.0 (iteration 1)
+ * @version 2.0 (iteration 2)
  */
 
 public class Floor extends Thread {
