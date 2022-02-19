@@ -23,6 +23,7 @@ To set up and launch the applicaton please follow these steps:
 **To run the application**
 
 - Navigate to the "src" folder, click on "Scheduler"
+- Copy the path of the "requests.txt" file and add it to the Floor.java class in "path" on line 45 as a String
 - Click "Run"
 The application should now execute
 
