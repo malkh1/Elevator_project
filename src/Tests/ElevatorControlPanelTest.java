@@ -26,8 +26,6 @@ public class ElevatorControlPanelTest {
         // Checking if the button light is associated with it's corresponding floor
         assertEquals(5, elevatorControlPanel.getElevatorLight().getFloorButton());
 
-// FIX ME: HOW DO WE CHECK IF THE CONTROLDOOR METHOD IS WORKING?
-
     }
 
 
