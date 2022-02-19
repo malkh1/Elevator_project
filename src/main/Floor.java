@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Implements the Floor class/thread for sending requests
@@ -16,23 +17,27 @@ public class Floor extends Thread {
 
     private Scheduler scheduler;
     private ArrayList<RequestEvent> details;
-    private ArrayList<RequestEvent> currentEvents;
+    private CopyOnWriteArrayList<RequestEvent> currentEvents;
+    private int floorNumber;
+    private static int floorCount = 1;
+    public static final int NUMBER_OF_FLOORS = 7;
 
     /**
      * Floor constructor
      */
-
     public Floor(Scheduler scheduler) {
         this.details = new ArrayList<>();
-        this.currentEvents = new ArrayList<>();
+        this.currentEvents = new CopyOnWriteArrayList<>();
         this.scheduler = scheduler;
+        floorNumber = floorCount;
+        floorCount++;
+
     }
 
     /**
      * Reads events from given text file
      * @return the parsed event info from the text file derived from path
      */
-
     public static ArrayList<RequestEvent> getEvents(String path) {
         ArrayList<RequestEvent> events = new ArrayList<>();
 
@@ -59,7 +64,6 @@ public class Floor extends Thread {
      * Parses through a given input string
      * @return an ArrayList of strings
      */
-
     private static ArrayList<String> parseLine(String l) {
         String[] temp = l.split(",");
         ArrayList<String> al = new ArrayList<>();
@@ -70,32 +74,34 @@ public class Floor extends Thread {
         return al;
     }
 
+    /**
+     * ADD REQUEST EVENTS PERTAINING TO THIS FLOOR
+     */
+    private void getRelevantEvents(){
+        for(RequestEvent event : details){
+            if(event.getCurrentFloor() == floorNumber)
+                currentEvents.add(event);
+        }
+    }
 
     /**
      * Registers given event to ongoing events
      *
      */
-
     public void register(RequestEvent x) {
         currentEvents.add(x);
     }
 
-    /**
-     * @return the events scheduled for this floor
-     */
-
-    public ArrayList<RequestEvent> getDetails(){
-        return this.details;
-    }
 
     /**
      * method for executing a floor thread
      */
 
     public void run() {
-        details = getEvents("/Users/sarashikhhassan/Desktop/Iteration1/src/main/requests.txt");
+        details = getEvents("src\\main\\requests.txt");
+        getRelevantEvents();
 
-        for (RequestEvent x : details) {
+        for (RequestEvent x : currentEvents) {
             scheduler.addElevatorRequest(x);
 
             try {
