@@ -1,5 +1,10 @@
 package elevatorSubsystem;
 
+/**
+ * Implements the Elevator Enum
+ * @author James Anderson
+ */
+
 public enum ElevatorState {
         UP,
         DOWN,
@@ -8,4 +13,3 @@ public enum ElevatorState {
         OPEN;
     ElevatorState() {}
 }
-
