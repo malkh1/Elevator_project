@@ -54,7 +54,7 @@ The elevator starts at floor 5 at 5:39pm, travels upwards to floor 6.
 ### 🔨 BREAKDOWN OF RESPONSIBILITIES
 
 ###### M2
-Mohammed: Schedular.java class, ElevatorState.java class
+Mohammed: Schedular.java class, ElevatorState.java class, Floor.java class
 
 Sara: ElevatorControlPanel.java class, ElevatorLight.java class, UML class diagram, README.txt file, test classes
 
