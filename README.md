@@ -61,7 +61,7 @@ Sara: Elevator.java class, README.txt file, test classes
 
 James: Sequence diagram, UML, test classes
 
-Marina: Floor.java class
+Marina: Floor.java class, test classes
 
 ###### M2
 Mohammed: Schedular.java class, ElevatorState.java class, Floor.java class
