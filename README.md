@@ -24,6 +24,7 @@ To set up and launch the applicaton please follow these steps:
 
 - Navigate to the "src" folder, click on "Scheduler"
 - Copy the path of the "requests.txt" file and add it to the Floor.java class in "path" on line 45 as a String
+- Run the schedular process first, the floor process second, then the elevator process
 - Click "Run"
 The application should now execute
 
@@ -55,13 +56,13 @@ The elevator starts at floor 5 at 5:39pm, travels upwards to floor 6.
 ### 🔨 BREAKDOWN OF RESPONSIBILITIES
 
 ###### M3
-Mohammed: Schedular.java class, State machine diagrams
+Mohammed: ElevatorServiceThread.java, ElevatorServer.java
 
-Sara: Elevator.java class, README.txt file, test classes
+Sara: State machine diagrams, UML diagrams, README.txt file
 
-James: Sequence diagram, UML, test classes
+James: FloorServer.java, FloorServiceThread.java
 
-Marina: Floor.java class, test classes
+Marina: test classes
 
 ###### M2
 Mohammed: Schedular.java class, ElevatorState.java class, Floor.java class
