@@ -77,7 +77,12 @@ public class UserRequest implements RequestEvent{
      */
     @Override
     public String toString() {
-        return "Time: " + time + " | Floor: " + currentFloor + " | Floor Button: " + (floorDirection ? "Up" : "Down") + " | Car Button: " + floorStop + "\n";
+        return "Time: " + time + " | Floor: " + currentFloor + " | Floor Button: " + (floorDirection ? "Up" : "Down")
+                + " | Car Button: " + floorStop + "\n";
+    }
+
+    public String toPlainText(){
+        return time + "," + currentFloor + "," + floorDirection + "," + floorStop;
     }
 
 

@@ -1,12 +1,17 @@
 package elevatorSubsystem;
 
 import main.RequestEvent;
-import main.Scheduler;
+import main.Utilities;
+import schedulerSubsystem.Scheduler;
+
+import java.io.IOException;
+import java.net.*;
 
 /**
  * Implements the Elevator thread
- * @author Mohammad Alkhaledi, James
- * @version 2.0 (iteration 2)
+ * @author Mohammad Alkhaledi
+ * @author James Anderson
+ * @version 3.0 (iteration 3)
  */
 public class Elevator extends Thread{
     private RequestEvent elevatorRequest;
@@ -16,6 +21,7 @@ public class Elevator extends Thread{
     private ElevatorState door;
     private int elevatorNumber;
     private static int elevatorCount = 1;
+    private DatagramSocket serviceSocket;
 
     public Elevator(Scheduler scheduler){
         floorNumber = 1;
@@ -73,22 +79,37 @@ public class Elevator extends Thread{
         return currentFloor;
     }
 
+    /**
+     * sets elevator state to UP
+     */
     public void setUp() {
         moving = ElevatorState.UP;
     }
 
+    /**
+     * sets elevator state to DOWN
+     */
     public void setDown() {
         moving = ElevatorState.DOWN;
     }
 
+    /**
+     * sets elevator state to STILL
+     */
     public void setStill() {
         moving = ElevatorState.STILL;
     }
 
+    /**
+     * sets elevator state to OPEN
+     */
     public void openDoor() {
         door = ElevatorState.OPEN;
     }
 
+    /**
+     * sets elevator state to CLOSED
+     */
     public void closeDoor() {
         door = ElevatorState.CLOSED;
     }
@@ -100,9 +121,26 @@ public class Elevator extends Thread{
     @Override
     public void run(){
         while(true){
-            elevatorRequest = scheduler.getElevatorRequest();
-            serveElevatorRequest();
-            scheduler.addFloorRequest(elevatorRequest);
+            try{
+                serviceSocket = new DatagramSocket();
+                String requestWork = "1" + floorNumber;
+                DatagramPacket requestPacket = new DatagramPacket(requestWork.getBytes(), requestWork.length(),
+                        InetAddress.getByName("localhost"), Utilities.ELEVATOR_SERVICE_PORT);
+                serviceSocket.send(requestPacket);
+                byte[] requestData = new byte[128];
+                requestPacket = new DatagramPacket(requestData, requestData.length);
+                serviceSocket.receive(requestPacket);
+
+                //parse requestdata given to elevator
+                String requestAsString = new String(requestPacket.getData()).trim();
+                elevatorRequest = Utilities.parseEvent(requestAsString);
+                serveElevatorRequest();
+
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            //scheduler.addFloorRequest(elevatorRequest);
         }
 
     }

@@ -1,16 +1,21 @@
 package main;
 
+import schedulerSubsystem.Scheduler;
+
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.concurrent.CopyOnWriteArrayList;
+
+import static main.Utilities.getEvents;
 
 /**
  * Implements the Floor class/thread for sending requests
- *  @author James Anderson, 101147068
- * @version 2.0 (iteration 2)
+ *  @author James Anderson, 101147068, Mohammad Alkhaledi 101162465
+ * @version 3.0 (iteration 3)
  */
 
 public class Floor extends Thread {
@@ -34,45 +39,8 @@ public class Floor extends Thread {
 
     }
 
-    /**
-     * Reads events from given text file
-     * @return the parsed event info from the text file derived from path
-     */
-    public static ArrayList<RequestEvent> getEvents(String path) {
-        ArrayList<RequestEvent> events = new ArrayList<>();
 
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader(path));
-            String lineInput;
-            ArrayList<String> input;
 
-            while ((lineInput = reader.readLine()) != null) {
-                input = parseLine(lineInput);
-                UserRequest newEvent = new UserRequest(LocalTime.parse(input.get(0)), Integer.parseInt(input.get(1)),
-                        Boolean.parseBoolean(input.get(2)), Integer.parseInt(input.get(3)));
-                events.add(newEvent);
-            }
-            reader.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return events;
-    }
-
-    /**
-     * Parses through a given input string
-     * @return an ArrayList of strings
-     */
-    private static ArrayList<String> parseLine(String l) {
-        String[] temp = l.split(",");
-        ArrayList<String> al = new ArrayList<>();
-        for(String s : temp) {
-            al.add(s);
-        }
-
-        return al;
-    }
 
     /**
      * ADD REQUEST EVENTS PERTAINING TO THIS FLOOR

@@ -40,7 +40,7 @@ public class ElevatorControlPanel {
 
     /**
      * Opens and closes the doors of an elevator
-     * @throws InterruptedException
+     * @throws InterruptedException when the thread is interrupted, throw exception
      */
     public void controlDoor() throws InterruptedException{
         Thread.sleep(500);
