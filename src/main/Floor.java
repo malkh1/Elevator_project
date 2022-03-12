@@ -12,8 +12,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import static main.Utilities.backToString;
-import static main.Utilities.getEvents;
+import static main.Utilities.*;
 
 /**
  * Implements the Floor class/thread for sending requests
@@ -25,7 +24,7 @@ public class Floor extends Thread {
 
     private Scheduler scheduler;
     private ArrayList<RequestEvent> details;
-    private CopyOnWriteArrayList<RequestEvent> currentEvents;
+    private ArrayList<RequestEvent> currentEvents;
     private int floorNumber;
     private static int floorCount = 1;
     public static final int NUMBER_OF_FLOORS = 7;
@@ -36,9 +35,9 @@ public class Floor extends Thread {
     /**
      * Floor constructor
      */
-    public Floor(Scheduler scheduler) {
+    public Floor() {
         this.details = new ArrayList<>();
-        this.currentEvents = new CopyOnWriteArrayList<>();
+        this.currentEvents = new ArrayList<>();
         this.scheduler = scheduler;
         floorNumber = floorCount;
         floorCount++;
@@ -77,7 +76,7 @@ public class Floor extends Thread {
         byte[] byteMsg = msg.getBytes();
 
         try {
-            requestPacket = new DatagramPacket(byteMsg, byteMsg.length, InetAddress.getLocalHost(), 8888);
+            requestPacket = new DatagramPacket(byteMsg, byteMsg.length, InetAddress.getLocalHost(), FLOOR_SERVICE_PORT);
         } catch (UnknownHostException e) {
             e.printStackTrace();
             System.exit(1);
@@ -98,9 +97,6 @@ public class Floor extends Thread {
         System.out.println("client received something");
     }
 
-
-
-
     /**
      * method for executing a floor thread
      */
@@ -111,7 +107,6 @@ public class Floor extends Thread {
 
         while(true) {
             for (RequestEvent x : currentEvents) {
-                scheduler.addElevatorRequest(x);
                 sendPacket(x); //Maybe
 
                 receivePacket();
@@ -121,8 +116,24 @@ public class Floor extends Thread {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                this.register(scheduler.getFloorRequest());
+                /*var currentEvent = scheduler.getFloorRequest();
+                System.out.printf("Passenger from Floor %d reached their destination to floor %d.\n",
+                        currentEvent.getCurrentFloor(), currentEvent.getFloorStop());*/
             }
         }
+    }
+
+    public static void main(String[] args) throws SocketException {
+        Floor[] floors = new Floor[Floor.NUMBER_OF_FLOORS];
+
+        for (int i = 0; i < Floor.NUMBER_OF_FLOORS; ++i) {
+            floors[i] = new Floor();
+        }
+
+        for (Floor f : floors) {
+            f.start();
+        }
+
+        System.out.println("Floors Created");
     }
 }
