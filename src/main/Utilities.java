@@ -62,15 +62,6 @@ public class Utilities {
                 Boolean.parseBoolean(input.get(2)), Integer.parseInt(input.get(3)));
     }
 
-    public static String backToString(RequestEvent event) {
-        String s = "";
-
-        s = event.getTime() + "," + event.getCurrentFloor() + "," + event.floorDirection() + "," + event.getFloorStop();
-
-        return s;
-    }
-
-
     /**
      * Parses through a given input string
      * @return an ArrayList of strings

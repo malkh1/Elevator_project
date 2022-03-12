@@ -1,16 +1,9 @@
 package main;
 
-import schedulerSubsystem.Scheduler;
-import main.Utilities;
-
 import java.net.*;
-import java.time.LocalTime;
-import java.util.ArrayList;
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.concurrent.CopyOnWriteArrayList;
+
+import java.util.ArrayList;
 
 import static main.Utilities.*;
 
@@ -22,15 +15,11 @@ import static main.Utilities.*;
 
 public class Floor extends Thread {
 
-    private Scheduler scheduler;
     private ArrayList<RequestEvent> details;
     private ArrayList<RequestEvent> currentEvents;
     private int floorNumber;
     private static int floorCount = 1;
     public static final int NUMBER_OF_FLOORS = 7;
-    private DatagramPacket requestPacket;
-    private DatagramSocket socket;
-
 
     /**
      * Floor constructor
@@ -38,19 +27,9 @@ public class Floor extends Thread {
     public Floor() {
         this.details = new ArrayList<>();
         this.currentEvents = new ArrayList<>();
-        this.scheduler = scheduler;
         floorNumber = floorCount;
         floorCount++;
-
-        try {
-            socket = new DatagramSocket();
-        } catch (SocketException e) {
-            e.printStackTrace();
-            System.exit(1);
-        }
-
     }
-
 
     /**
      * ADD REQUEST EVENTS PERTAINING TO THIS FLOOR
@@ -63,67 +42,47 @@ public class Floor extends Thread {
     }
 
     /**
-     * Registers given event to ongoing events
-     *
+     * floor thread of execution
      */
-    public void register(RequestEvent x) {
-        currentEvents.add(x);
-    }
-
-    private void sendPacket(RequestEvent x) {
-        String msg = backToString(x);
-
-        byte[] byteMsg = msg.getBytes();
-
-        try {
-            requestPacket = new DatagramPacket(byteMsg, byteMsg.length, InetAddress.getLocalHost(), FLOOR_SERVICE_PORT);
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-            System.exit(1);
-        }
-    }
-    private void receivePacket() {
-        byte[] msg = new byte[100];
-
-        DatagramPacket receivedPacket = new DatagramPacket(msg, msg.length);
-
-        try {
-            socket.receive(receivedPacket);
-        } catch(IOException e) {
-            e.printStackTrace();
-            System.exit(1);
-        }
-
-        System.out.println("client received something");
-    }
-
-    /**
-     * method for executing a floor thread
-     */
-
     public void run() {
         details = getEvents("src\\main\\requests.txt");
         getRelevantEvents();
 
-        while(true) {
-            for (RequestEvent x : currentEvents) {
-                sendPacket(x); //Maybe
+        for (RequestEvent x : currentEvents) {
+            try {
+                //sending elevator request info
+                DatagramSocket serviceSocket = new DatagramSocket();
+                byte[] elevatorRequest = new byte[1024];
+                elevatorRequest[0] = 1;
+                byte[] requestData = ((UserRequest)x).toPlainText().getBytes();
+                System.arraycopy(requestData, 0, elevatorRequest,1, requestData.length);
+                DatagramPacket sendPacket = new DatagramPacket(elevatorRequest, elevatorRequest.length,
+                        InetAddress.getLocalHost(), FLOOR_SERVICE_PORT);
+                serviceSocket.send(sendPacket);
 
-                receivePacket();
-
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                /*var currentEvent = scheduler.getFloorRequest();
-                System.out.printf("Passenger from Floor %d reached their destination to floor %d.\n",
-                        currentEvent.getCurrentFloor(), currentEvent.getFloorStop());*/
+                //requesting floor info
+                byte[] floorRequestData = {2, (byte)floorNumber};
+                sendPacket = new DatagramPacket(floorRequestData, floorRequestData.length,
+                        InetAddress.getLocalHost(), FLOOR_SERVICE_PORT);
+                serviceSocket.send(sendPacket);
+                requestData = new byte[1024];
+                DatagramPacket requestPacket = new DatagramPacket(requestData, requestData.length);
+                serviceSocket.receive(requestPacket);
+                String requestTextData = new String(requestPacket.getData()).trim();
+                var floorRequest = parseEvent(requestTextData);
+                System.out.printf("Passenger from floor %d reached their destination of floor %d\n",
+                        floorRequest.getCurrentFloor(), floorRequest.getFloorStop());
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }
 
-    public static void main(String[] args) throws SocketException {
+    /**
+     * floor's main thread
+     * @param args
+     */
+    public static void main(String[] args) {
         Floor[] floors = new Floor[Floor.NUMBER_OF_FLOORS];
 
         for (int i = 0; i < Floor.NUMBER_OF_FLOORS; ++i) {
@@ -134,6 +93,5 @@ public class Floor extends Thread {
             f.start();
         }
 
-        System.out.println("Floors Created");
     }
 }
