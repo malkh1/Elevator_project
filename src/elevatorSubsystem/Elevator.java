@@ -2,7 +2,7 @@ package elevatorSubsystem;
 
 import main.RequestEvent;
 import main.Utilities;
-import schedulerSubsystem.Scheduler;
+
 
 import java.io.IOException;
 import java.net.*;
@@ -20,7 +20,6 @@ public class Elevator extends Thread{
     private ElevatorState door;
     private int elevatorNumber;
     private static int elevatorCount = 1;
-    private DatagramSocket serviceSocket;
 
     public Elevator(){
         floorNumber = 1;
@@ -126,7 +125,7 @@ public class Elevator extends Thread{
     public void run(){
         while(true){
             try{
-                serviceSocket = new DatagramSocket();
+                DatagramSocket serviceSocket = new DatagramSocket();
                 byte[] elevatorRequest = {1, (byte) floorNumber};
                 DatagramPacket requestPacket = new DatagramPacket(elevatorRequest, elevatorRequest.length,
                         InetAddress.getByName("localhost"), Utilities.ELEVATOR_SERVICE_PORT);
@@ -143,9 +142,7 @@ public class Elevator extends Thread{
                 byte[] floorRequest = new byte[1024];
                 floorRequest[0] = 2;
                 requestData = requestAsString.getBytes();
-                for (int i = 0; i < requestData.length; ++i){
-                    floorRequest[i + 1] = requestData[i];
-                }
+                System.arraycopy(requestData, 0, floorRequest, 1, requestData.length);
                 requestPacket = new DatagramPacket(floorRequest, floorRequest.length,
                         InetAddress.getByName("localhost"), Utilities.ELEVATOR_SERVICE_PORT);
                 serviceSocket.send(requestPacket);
@@ -159,7 +156,7 @@ public class Elevator extends Thread{
     }
 
     public static void main(String[] args) {
-        Elevator elevators[] = new Elevator[7];
+        Elevator[] elevators = new Elevator[7];
         for (int i = 0; i < elevators.length; ++i){
             elevators[i] = new Elevator();
         }
