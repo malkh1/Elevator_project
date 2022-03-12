@@ -1,7 +1,9 @@
 package main;
 
 import schedulerSubsystem.Scheduler;
+import main.Utilities;
 
+import java.net.*;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.io.BufferedReader;
@@ -10,6 +12,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import static main.Utilities.backToString;
 import static main.Utilities.getEvents;
 
 /**
@@ -26,6 +29,9 @@ public class Floor extends Thread {
     private int floorNumber;
     private static int floorCount = 1;
     public static final int NUMBER_OF_FLOORS = 7;
+    private DatagramPacket requestPacket;
+    private DatagramSocket socket;
+
 
     /**
      * Floor constructor
@@ -37,9 +43,14 @@ public class Floor extends Thread {
         floorNumber = floorCount;
         floorCount++;
 
+        try {
+            socket = new DatagramSocket();
+        } catch (SocketException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+
     }
-
-
 
 
     /**
@@ -60,6 +71,35 @@ public class Floor extends Thread {
         currentEvents.add(x);
     }
 
+    private void sendPacket(RequestEvent x) {
+        String msg = backToString(x);
+
+        byte[] byteMsg = msg.getBytes();
+
+        try {
+            requestPacket = new DatagramPacket(byteMsg, byteMsg.length, InetAddress.getLocalHost(), 8888);
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+    }
+    private void receivePacket() {
+        byte[] msg = new byte[100];
+
+        DatagramPacket receivedPacket = new DatagramPacket(msg, msg.length);
+
+        try {
+            socket.receive(receivedPacket);
+        } catch(IOException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+
+        System.out.println("client received something");
+    }
+
+
+
 
     /**
      * method for executing a floor thread
@@ -69,15 +109,20 @@ public class Floor extends Thread {
         details = getEvents("src\\main\\requests.txt");
         getRelevantEvents();
 
-        for (RequestEvent x : currentEvents) {
-            scheduler.addElevatorRequest(x);
+        while(true) {
+            for (RequestEvent x : currentEvents) {
+                scheduler.addElevatorRequest(x);
+                sendPacket(x); //Maybe
 
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+                receivePacket();
+
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                this.register(scheduler.getFloorRequest());
             }
-            this.register(scheduler.getFloorRequest());
         }
     }
 }
