@@ -8,7 +8,7 @@ import java.net.SocketException;
 import static main.Utilities.ELEVATOR_SERVICE_PORT;
 
 /**
- * Server thread to receive requests from elevators, and creates an ElevatorServiceThread to handle each request
+ * The Server thread to receive requests from elevators, and creates an ElevatorServiceThread to handle each request
  */
 public class ElevatorServer extends Thread{
     private DatagramSocket receiverSocket;
@@ -32,16 +32,24 @@ public class ElevatorServer extends Thread{
     @Override
     public void run() {
         while(true){
-            byte[] requestData = new byte[2];
+            byte[] requestData = new byte[1024];
             requestPacket = new DatagramPacket(requestData, requestData.length);
 
             System.out.printf("Scheduler>>>Listening on port %d for elevator requests..\n", ELEVATOR_SERVICE_PORT);
             try{
                 receiverSocket.receive(requestPacket);
-                String request = new String(requestData);
-                //parse request information
-
-                System.out.println("Scheduler>>>Received an elevator request at ");
+                System.out.println("Scheduler>>>Received an elevator request from "
+                + requestPacket.getAddress());
+                ElevatorServiceThread serviceThread = null;
+                if(requestData[0] == 1){
+                    serviceThread = new ElevatorServiceThread(scheduler, requestPacket.getAddress(),
+                            requestPacket.getPort());
+                }
+                else if(requestData[0] == 2){
+                    String elevatorRequest = new String(requestData).trim();
+                    serviceThread = new ElevatorServiceThread(scheduler, elevatorRequest);
+                }
+                serviceThread.start();
             } catch (IOException e) {
                 e.printStackTrace();
             }
