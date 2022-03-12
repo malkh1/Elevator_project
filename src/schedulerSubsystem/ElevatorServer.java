@@ -12,7 +12,6 @@ import static main.Utilities.ELEVATOR_SERVICE_PORT;
  */
 public class ElevatorServer extends Thread{
     private DatagramSocket receiverSocket;
-    private DatagramPacket requestPacket;
     private Scheduler scheduler;
 
 
@@ -33,7 +32,7 @@ public class ElevatorServer extends Thread{
     public void run() {
         while(true){
             byte[] requestData = new byte[1024];
-            requestPacket = new DatagramPacket(requestData, requestData.length);
+            DatagramPacket requestPacket = new DatagramPacket(requestData, requestData.length);
 
             System.out.printf("Scheduler>>>Listening on port %d for elevator requests..\n", ELEVATOR_SERVICE_PORT);
             try{

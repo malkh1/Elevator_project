@@ -38,7 +38,7 @@ public class ElevatorServiceThread extends Thread{
     /**
      * Constructor for the elevator service thread when adding a floor request
      * @param scheduler the scheduler to communicate with
-     * @param floorRequest
+     * @param floorRequest the floor request in plainText
      */
     public ElevatorServiceThread(Scheduler scheduler, String floorRequest){
         this.scheduler = scheduler;
