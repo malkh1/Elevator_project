@@ -16,16 +16,14 @@ import java.net.*;
 public class Elevator extends Thread{
     private RequestEvent elevatorRequest;
     private int floorNumber;
-    private Scheduler scheduler;
     private ElevatorState moving;
     private ElevatorState door;
     private int elevatorNumber;
     private static int elevatorCount = 1;
     private DatagramSocket serviceSocket;
 
-    public Elevator(Scheduler scheduler){
+    public Elevator(){
         floorNumber = 1;
-        this.scheduler = scheduler;
         door = ElevatorState.OPEN;
         moving = ElevatorState.STILL;
         elevatorNumber = elevatorCount;
@@ -56,6 +54,12 @@ public class Elevator extends Thread{
         System.out.println("Current States; Door State: " + door + ". Moving State: " + moving + ".");
     }
 
+    /**
+     * takes the elevator from its current floor to its desired floor
+     * @param currentFloor the current floor of the elevator
+     * @param desiredFloor the floor the elevator wants to go to
+     * @return the current floor once elevator has reached its destination
+     */
     private int goToFloor(int currentFloor, int desiredFloor){
         closeDoor();
         while(currentFloor != desiredFloor){
@@ -123,25 +127,46 @@ public class Elevator extends Thread{
         while(true){
             try{
                 serviceSocket = new DatagramSocket();
-                String requestWork = "1" + floorNumber;
-                DatagramPacket requestPacket = new DatagramPacket(requestWork.getBytes(), requestWork.length(),
+                byte[] elevatorRequest = {1, (byte) floorNumber};
+                DatagramPacket requestPacket = new DatagramPacket(elevatorRequest, elevatorRequest.length,
                         InetAddress.getByName("localhost"), Utilities.ELEVATOR_SERVICE_PORT);
                 serviceSocket.send(requestPacket);
-                byte[] requestData = new byte[128];
+                byte[] requestData = new byte[1024];
                 requestPacket = new DatagramPacket(requestData, requestData.length);
                 serviceSocket.receive(requestPacket);
 
-                //parse requestdata given to elevator
+                //parse request data given to elevator
                 String requestAsString = new String(requestPacket.getData()).trim();
-                elevatorRequest = Utilities.parseEvent(requestAsString);
+                this.elevatorRequest = Utilities.parseEvent(requestAsString);
                 serveElevatorRequest();
 
+                byte[] floorRequest = new byte[1024];
+                floorRequest[0] = 2;
+                requestData = requestAsString.getBytes();
+                for (int i = 0; i < requestData.length; ++i){
+                    floorRequest[i + 1] = requestData[i];
+                }
+                requestPacket = new DatagramPacket(floorRequest, floorRequest.length,
+                        InetAddress.getByName("localhost"), Utilities.ELEVATOR_SERVICE_PORT);
+                serviceSocket.send(requestPacket);
 
             } catch (IOException e) {
                 e.printStackTrace();
             }
             //scheduler.addFloorRequest(elevatorRequest);
         }
+
+    }
+
+    public static void main(String[] args) {
+        Elevator elevators[] = new Elevator[7];
+        for (int i = 0; i < elevators.length; ++i){
+            elevators[i] = new Elevator();
+        }
+
+        for(Elevator e : elevators)
+            e.start();
+
 
     }
 
