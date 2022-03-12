@@ -125,6 +125,7 @@ public class Elevator extends Thread{
     public void run(){
         while(true){
             try{
+                //requesting work
                 DatagramSocket serviceSocket = new DatagramSocket();
                 byte[] elevatorRequest = {1, (byte) floorNumber};
                 DatagramPacket requestPacket = new DatagramPacket(elevatorRequest, elevatorRequest.length,
@@ -133,12 +134,11 @@ public class Elevator extends Thread{
                 byte[] requestData = new byte[1024];
                 requestPacket = new DatagramPacket(requestData, requestData.length);
                 serviceSocket.receive(requestPacket);
-
-                //parse request data given to elevator
                 String requestAsString = new String(requestPacket.getData()).trim();
                 this.elevatorRequest = Utilities.parseEvent(requestAsString);
                 serveElevatorRequest();
 
+                //sending floor request info
                 byte[] floorRequest = new byte[1024];
                 floorRequest[0] = 2;
                 requestData = requestAsString.getBytes();
@@ -150,11 +150,14 @@ public class Elevator extends Thread{
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            //scheduler.addFloorRequest(elevatorRequest);
         }
 
     }
 
+    /**
+     * the elevator process' main thread
+     * @param args command line arguments
+     */
     public static void main(String[] args) {
         Elevator[] elevators = new Elevator[7];
         for (int i = 0; i < elevators.length; ++i){
