@@ -48,7 +48,7 @@ public class ElevatorServiceThread extends Thread{
     }
 
     /**
-     *
+     *The thread of execution for the service thread
      */
     @Override
     public void run(){
@@ -65,7 +65,6 @@ public class ElevatorServiceThread extends Thread{
             }
 
             elevatorRequest = false;
-
         }
         while (floorRequest) {
             var userRequest = Utilities.parseEvent(requestToAdd);

@@ -34,12 +34,13 @@ public class ElevatorServer extends Thread{
             byte[] requestData = new byte[1024];
             DatagramPacket requestPacket = new DatagramPacket(requestData, requestData.length);
 
-            System.out.printf("Scheduler>>>Listening on port %d for elevator requests..\n", ELEVATOR_SERVICE_PORT);
+            System.out.printf("\nElevator_Server>>>Listening on port %d for elevator requests..\n", ELEVATOR_SERVICE_PORT);
             try{
                 receiverSocket.receive(requestPacket);
-                System.out.println("Scheduler>>>Received an elevator request from "
+                System.out.println("\nElevator_Server>>>Received an elevator request from "
                 + requestPacket.getAddress());
                 ElevatorServiceThread serviceThread = null;
+
                 if(requestData[0] == 1){
                     serviceThread = new ElevatorServiceThread(scheduler, requestPacket.getAddress(),
                             requestPacket.getPort());

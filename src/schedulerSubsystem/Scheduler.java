@@ -1,9 +1,9 @@
 package schedulerSubsystem;
 
-import elevatorSubsystem.Elevator;
 import main.Floor;
 import main.RequestEvent;
 
+import java.net.SocketException;
 import java.util.LinkedList;
 
 /**
@@ -108,28 +108,17 @@ public class Scheduler {
     }
 
 
-
-
-    public static void main(String[] args) {
+    /**
+     * main thread for the scheduler process
+     * @param args command line arguments
+     * @throws SocketException if the socket fails to bind to a port
+     */
+    public static void main(String[] args) throws SocketException {
         Scheduler scheduler = new Scheduler();
-        Floor[] floors = new Floor[Floor.NUMBER_OF_FLOORS];
-        Elevator[] elevators = new Elevator[7];
-
-        for(int i = 0; i < Floor.NUMBER_OF_FLOORS; ++i){
-            floors[i] = new Floor(scheduler);
-        }
-
-        for (int i = 0; i < elevators.length; ++i){
-            elevators[i] = new Elevator(scheduler);
-        }
-
-        for(Floor f : floors)
-            f.start();
-
-        for(Elevator e : elevators)
-            e.start();
-
-
+        FloorServer floorServer = new FloorServer(scheduler);
+        ElevatorServer elevatorServer = new ElevatorServer(scheduler);
+        elevatorServer.start();
+        floorServer.start();
     }
 
 
