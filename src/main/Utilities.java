@@ -10,7 +10,7 @@ import java.util.Arrays;
 /**
  * Utilities class that carries static fields and methods for other classes to use
  * @author Mohammad Alkhaledi
- * @version 3.0
+ * @version 4.0
  */
 public class Utilities {
     public static final int ELEVATOR_SERVICE_PORT = 7777;
