@@ -15,6 +15,8 @@ import java.util.Arrays;
 public class Utilities {
     public static final int ELEVATOR_SERVICE_PORT = 7777;
     public static final int FLOOR_SERVICE_PORT = 8888;
+    public static final long ELEVATOR_TRAVEL_SPEED = 2000;
+    public static final long ELEVATOR_DOOR_SPEED = 1000;
 
     /**
      * Reads events from given text file
@@ -48,7 +50,7 @@ public class Utilities {
      */
     public static RequestEvent parseEvent(ArrayList<String> input){
         return new UserRequest(LocalTime.parse(input.get(0)), Integer.parseInt(input.get(1)),
-                Boolean.parseBoolean(input.get(2)), Integer.parseInt(input.get(3)));
+                Boolean.parseBoolean(input.get(2)), Integer.parseInt(input.get(3)), Integer.parseInt(input.get(4)));
     }
 
     /**
@@ -57,9 +59,9 @@ public class Utilities {
      * @return requestevent object
      */
     public static RequestEvent parseEvent(String unparsedString){
-        ArrayList<String> input = parseLine(unparsedString);
-        return new UserRequest(LocalTime.parse(input.get(0)), Integer.parseInt(input.get(1)),
-                Boolean.parseBoolean(input.get(2)), Integer.parseInt(input.get(3)));
+        String[] input = unparsedString.split(",");
+        return new UserRequest(LocalTime.parse(input[0]), Integer.parseInt(input[1]),
+                Boolean.parseBoolean(input[2]), Integer.parseInt(input[3]), Integer.parseInt(input[4]));
     }
 
     /**

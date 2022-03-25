@@ -70,8 +70,15 @@ public class Floor extends Thread {
                 serviceSocket.receive(requestPacket);
                 String requestTextData = new String(requestPacket.getData()).trim();
                 var floorRequest = parseEvent(requestTextData);
-                System.out.printf("Passenger from floor %d reached their destination of floor %d\n",
-                        floorRequest.getCurrentFloor(), floorRequest.getFloorStop());
+
+                if(((UserRequest)floorRequest).returnHardFault()){
+                    System.out.printf("Elevator malfunctioned, and passengers reached floor %d before the error occurred.\n", floorRequest.getCurrentFloor());
+                }
+                else{
+                    System.out.printf("Passenger from floor %d reached their destination of floor %d\n",
+                            floorRequest.getCurrentFloor(), floorRequest.getFloorStop());
+                }
+
             } catch (IOException e) {
                 e.printStackTrace();
             }

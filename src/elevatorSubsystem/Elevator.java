@@ -1,6 +1,7 @@
 package elevatorSubsystem;
 
-import main.RequestEvent;
+
+import main.UserRequest;
 import main.Utilities;
 
 
@@ -9,17 +10,18 @@ import java.net.*;
 
 /**
  * Implements the Elevator thread
- * @author Mohammad Alkhaledi
+ * @author Mohammad Alkhaledi 101162465
  * @author James Anderson
- * @version 3.0 (iteration 3)
+ * @version 4.0 (iteration 4)
  */
 public class Elevator extends Thread{
-    private RequestEvent elevatorRequest;
+    private UserRequest elevatorRequest;
     private int floorNumber;
     private ElevatorState moving;
     private ElevatorState door;
-    private int elevatorNumber;
+    private final int elevatorNumber;
     private static int elevatorCount = 1;
+    private boolean operational;
 
     public Elevator(){
         floorNumber = 1;
@@ -27,6 +29,7 @@ public class Elevator extends Thread{
         moving = ElevatorState.STILL;
         elevatorNumber = elevatorCount;
         elevatorCount++;
+        operational = true;
     }
 
     /**
@@ -48,9 +51,21 @@ public class Elevator extends Thread{
         }
 
         setStill();
-        openDoor();
+
+        if(elevatorRequest.returnNoFault()){
+            openDoor();
+        }
+        else if(elevatorRequest.returnTransientFault()){
+            handleTransientFault();
+            openDoor();
+        }
+        else if(elevatorRequest.returnHardFault()){
+            handleHardFault();
+            return;
+        }
         System.out.printf("Elevator %d has reached the destination..\n", elevatorNumber);
-        System.out.println("Current States; Door State: " + door + ". Moving State: " + moving + ".");
+
+        System.out.println("Door State: " + door + ". Moving State: " + moving + ".");
     }
 
     /**
@@ -65,7 +80,7 @@ public class Elevator extends Thread{
             System.out.printf("Elevator %d is at floor %d..\n", elevatorNumber, currentFloor);
             System.out.println("Current States; Door State: " + door + ". Moving State: " + moving + ".");
             try {
-                sleep(1000);
+                sleep(Utilities.ELEVATOR_TRAVEL_SPEED);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -85,71 +100,111 @@ public class Elevator extends Thread{
     /**
      * sets elevator state to UP
      */
-    public void setUp() {
+    private void setUp() {
         moving = ElevatorState.UP;
     }
 
     /**
      * sets elevator state to DOWN
      */
-    public void setDown() {
+    private void setDown() {
         moving = ElevatorState.DOWN;
     }
 
     /**
      * sets elevator state to STILL
      */
-    public void setStill() {
+    private void setStill() {
         moving = ElevatorState.STILL;
     }
 
     /**
      * sets elevator state to OPEN
      */
-    public void openDoor() {
+    private void openDoor() {
         door = ElevatorState.OPEN;
     }
 
     /**
      * sets elevator state to CLOSED
      */
-    public void closeDoor() {
+    private void closeDoor() {
         door = ElevatorState.CLOSED;
     }
 
+    /**
+     * elevator behaviour that deals with a non-serious fault with the elevator
+     */
+    private void handleTransientFault(){
+        System.out.printf("Error occurred in Elevator %d while opening door..\n", elevatorNumber);
+        long slowDoorSpeed = Utilities.ELEVATOR_DOOR_SPEED * 3;
+        try {
+            sleep(slowDoorSpeed);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println("Attempting to resolve the issue..");
+        try {
+            sleep(slowDoorSpeed);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println("Error resolved. The door malfunctioned, but is now functional.");
+    }
+
+    /**
+     * elevator behaviour that deals with a serious fault with the elevator
+     */
+    private void handleHardFault(){
+        System.out.printf("An unknown error occurred in Elevator %d.\nPlease wait a moment.\n", elevatorNumber);
+        long troubleShootSpeed = Utilities.ELEVATOR_DOOR_SPEED * 7;
+        try {
+            sleep(troubleShootSpeed);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        openDoor();
+        System.out.printf("""
+                Error could not be resolved. Elevator %d is out of commission.
+                Passengers have exited elevator thru emergency exit on floor %d.
+                Please call maintenance team to resolve issue.
+                """,elevatorNumber, floorNumber);
+        elevatorRequest.setCurrentFloor(floorNumber);
+        operational = false;
+    }
 
     /**
      * the elevator's thread of execution
      */
     @Override
-    public void run(){
-        while(true){
-            try{
+    public void run() {
+        try {
+            while (operational) {
+
                 //requesting work
                 DatagramSocket serviceSocket = new DatagramSocket();
                 byte[] elevatorRequest = {1, (byte) floorNumber};
-                DatagramPacket requestPacket = new DatagramPacket(elevatorRequest, elevatorRequest.length,
-                        InetAddress.getByName("localhost"), Utilities.ELEVATOR_SERVICE_PORT);
+                DatagramPacket requestPacket = new DatagramPacket(elevatorRequest, elevatorRequest.length, InetAddress.getByName("localhost"), Utilities.ELEVATOR_SERVICE_PORT);
                 serviceSocket.send(requestPacket);
                 byte[] requestData = new byte[1024];
                 requestPacket = new DatagramPacket(requestData, requestData.length);
                 serviceSocket.receive(requestPacket);
                 String requestAsString = new String(requestPacket.getData()).trim();
-                this.elevatorRequest = Utilities.parseEvent(requestAsString);
-                serveElevatorRequest();
+                this.elevatorRequest = (UserRequest) Utilities.parseEvent(requestAsString);
 
+                serveElevatorRequest();
+                requestAsString = this.elevatorRequest.toPlainText();
                 //sending floor request info
                 byte[] floorRequest = new byte[1024];
                 floorRequest[0] = 2;
                 requestData = requestAsString.getBytes();
                 System.arraycopy(requestData, 0, floorRequest, 1, requestData.length);
-                requestPacket = new DatagramPacket(floorRequest, floorRequest.length,
-                        InetAddress.getByName("localhost"), Utilities.ELEVATOR_SERVICE_PORT);
+                requestPacket = new DatagramPacket(floorRequest, floorRequest.length, InetAddress.getByName("localhost"), Utilities.ELEVATOR_SERVICE_PORT);
                 serviceSocket.send(requestPacket);
-
-            } catch (IOException e) {
-                e.printStackTrace();
             }
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
     }
@@ -159,7 +214,7 @@ public class Elevator extends Thread{
      * @param args command line arguments
      */
     public static void main(String[] args) {
-        Elevator[] elevators = new Elevator[7];
+        Elevator[] elevators = new Elevator[3];
         for (int i = 0; i < elevators.length; ++i){
             elevators[i] = new Elevator();
         }
