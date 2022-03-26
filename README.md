@@ -54,6 +54,14 @@ The elevator starts at floor 5 at 5:39pm, travels upwards to floor 6.
 
 
 ### 🔨 BREAKDOWN OF RESPONSIBILITIES
+###### M4
+Mohammed: State machine diagrams, UML diagrams, utilities class
+
+Sara: elevator.java class, README.txt file
+
+James: test classes, timing diagram
+
+Marina: userRequest.java class
 
 ###### M3
 Mohammed: ElevatorServiceThread.java, ElevatorServer.java
