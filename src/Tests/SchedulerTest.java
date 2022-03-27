@@ -1,11 +1,9 @@
 package Tests;
 
-
-
-import main.Scheduler; 
 import main.UserRequest;
 import org.junit.Before;
 import org.junit.Test;
+import schedulerSubsystem.Scheduler;
 
 import java.time.LocalTime;
 
@@ -21,7 +19,7 @@ public class SchedulerTest {
         scheduler = new Scheduler();
         userRequest =
                 new UserRequest
-                        (LocalTime.of(12,12,12), 1, true, 5);
+                        (LocalTime.of(12,12,12), 1, true, 5, 0);
     }
 
     @Test
@@ -33,13 +31,7 @@ public class SchedulerTest {
     public void getElevatorRequestAvailable() {
         assertFalse(scheduler.getElevatorRequestAvailable());
     }
-
-
-    @Test
-    public void getElevatorRequest() {
-        scheduler.addElevatorRequest(userRequest);
-        assertEquals(scheduler.getElevatorRequest(), userRequest);
-    }
+    
     
     @Test
     public void getFloorRequest() {
