@@ -7,8 +7,7 @@ import org.junit.Test;
 
 import java.time.LocalTime;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertTrue;
+import static junit.framework.Assert.*;
 
 public class UserRequestTest {
     private UserRequest userRequest;
@@ -16,7 +15,7 @@ public class UserRequestTest {
     @Before
     public void setUp() throws Exception {
         userRequest = new UserRequest(LocalTime.of(13,45,30,0), 2
-                , true, 4);
+                , true, 4, 0);
     }
 
 
@@ -28,7 +27,6 @@ public class UserRequestTest {
 	@Test
     public void getCurrentFloor() {
         assertEquals(2, userRequest.getCurrentFloor());
-
     }
 
 	@Test
@@ -40,4 +38,21 @@ public class UserRequestTest {
     public void getFloorStop() {
         assertEquals(4, userRequest.getFloorStop());
     }
+
+    @Test
+    public void returnNoFaultTest(){
+        assertTrue(userRequest.returnNoFault());
+    }
+
+    @Test
+    public void returnTransientFaultTest(){
+        assertFalse(userRequest.returnTransientFault());
+    }
+
+    @Test
+    public void returnHardFaultTest(){
+        assertEquals(false, userRequest.returnHardFault());
+    }
+
 }
+
