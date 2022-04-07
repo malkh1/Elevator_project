@@ -12,4 +12,5 @@ public enum ElevatorState {
         CLOSED,
         OPEN;
     ElevatorState() {}
+
 }

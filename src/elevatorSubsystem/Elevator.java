@@ -12,7 +12,7 @@ import java.net.*;
  * Implements the Elevator thread
  * @author Mohammad Alkhaledi 101162465
  * @author James Anderson
- * @version 4.0 (iteration 4)
+ * @version 5.0 (iteration 5)
  */
 public class Elevator extends Thread{
     private UserRequest elevatorRequest;
@@ -22,15 +22,44 @@ public class Elevator extends Thread{
     private final int elevatorNumber;
     private static int elevatorCount = 1;
     private boolean operational;
+    private boolean occupied;
+    private ElevatorGUI elevatorGUI;
+    public final static int NUMBER_OF_ELEVATORS = 4;
 
-    public Elevator(){
+    /**
+     * Default Constructor for elevator class
+     * Elevator states:
+     * - Direction travelling
+     * - Door open/close
+     * - Elevator operational state
+     */
+    public Elevator(ElevatorGUI elevatorGUI){
         floorNumber = 1;
         door = ElevatorState.OPEN;
         moving = ElevatorState.STILL;
         elevatorNumber = elevatorCount;
         elevatorCount++;
         operational = true;
+        occupied = false;
+        this.elevatorGUI = elevatorGUI;
     }
+
+    public int getFloorNumber(){
+        return floorNumber;
+    }
+    public int getElevatorNumber(){
+        return elevatorNumber;
+    }
+    public ElevatorState getMoving(){
+        return moving;
+    }
+    public ElevatorState getDoor(){
+        return door;
+    }
+    public boolean getOperational(){
+        return operational;
+    }
+    public boolean getOccupied(){return occupied;}
 
     /**
      * elevator goes to the floor that is requested
@@ -42,30 +71,34 @@ public class Elevator extends Thread{
 
         setStill();
         openDoor();
-
+        occupied = true;
         System.out.printf("Elevator %d has reached the passenger\n", elevatorNumber);
         System.out.println("Current States; Door State: " + door + ". Moving State: " + moving + ".");
-
+        signalGUIUpdate(elevatorGUI, elevatorNumber);
         if(floorNumber != requestedFloor && moving == ElevatorState.STILL){
             floorNumber = goToFloor(floorNumber, requestedFloor);
         }
 
         setStill();
-
+        signalGUIUpdate(elevatorGUI, elevatorNumber);
         if(elevatorRequest.returnNoFault()){
             openDoor();
+            signalGUIUpdate(elevatorGUI, elevatorNumber);
         }
         else if(elevatorRequest.returnTransientFault()){
             handleTransientFault();
             openDoor();
+            signalGUIUpdate(elevatorGUI, elevatorNumber);
         }
         else if(elevatorRequest.returnHardFault()){
             handleHardFault();
+            signalGUIUpdate(elevatorGUI, elevatorNumber);
             return;
         }
         System.out.printf("Elevator %d has reached the destination..\n", elevatorNumber);
-
+        occupied = false;
         System.out.println("Door State: " + door + ". Moving State: " + moving + ".");
+        signalGUIUpdate(elevatorGUI, elevatorNumber);
     }
 
     /**
@@ -76,6 +109,7 @@ public class Elevator extends Thread{
      */
     private int goToFloor(int currentFloor, int desiredFloor){
         closeDoor();
+        signalGUIUpdate(elevatorGUI, elevatorNumber);
         while(currentFloor != desiredFloor){
             System.out.printf("Elevator %d is at floor %d..\n", elevatorNumber, currentFloor);
             System.out.println("Current States; Door State: " + door + ". Moving State: " + moving + ".");
@@ -87,13 +121,16 @@ public class Elevator extends Thread{
             if(currentFloor > desiredFloor && door == ElevatorState.CLOSED){
                 setDown();
                 --currentFloor;
+                signalGUIUpdate(elevatorGUI, elevatorNumber);
             }
             else if (door == ElevatorState.CLOSED){
                 setUp();
                 ++currentFloor;
+                signalGUIUpdate(elevatorGUI, elevatorNumber);
             }
-
+            signalGUIUpdate(elevatorGUI, elevatorNumber);
         }
+        signalGUIUpdate(elevatorGUI, elevatorNumber);
         return currentFloor;
     }
 
@@ -208,21 +245,26 @@ public class Elevator extends Thread{
         }
 
     }
+    private void signalGUIUpdate(ElevatorGUI gui, int elevatorNumber){
+        gui.setSignalUpdate(elevatorNumber - 1);
+    }
 
     /**
      * the elevator process' main thread
      * @param args command line arguments
      */
     public static void main(String[] args) {
-        Elevator[] elevators = new Elevator[3];
+        Elevator[] elevators = new Elevator[NUMBER_OF_ELEVATORS];
+        ElevatorGUI elevatorGUI = new ElevatorGUI();
         for (int i = 0; i < elevators.length; ++i){
-            elevators[i] = new Elevator();
+            elevators[i] = new Elevator(elevatorGUI);
+            elevatorGUI.addElevator(elevators[i]);
         }
-
+        elevatorGUI.startGUI();
         for(Elevator e : elevators)
             e.start();
 
-
+        new Thread(elevatorGUI).start();
     }
 
 }
