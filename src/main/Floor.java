@@ -10,7 +10,7 @@ import static main.Utilities.*;
 /**
  * Implements the Floor class/thread for sending requests
  *  @author James Anderson, 101147068, Mohammad Alkhaledi 101162465
- * @version 3.0 (iteration 3)
+ * @version 5.0 (iteration 5)
  */
 
 public class Floor extends Thread {
@@ -19,7 +19,8 @@ public class Floor extends Thread {
     private ArrayList<RequestEvent> currentEvents;
     private int floorNumber;
     private static int floorCount = 1;
-    public static final int NUMBER_OF_FLOORS = 7;
+    private static long stopwatch = System.nanoTime();
+    public static final int NUMBER_OF_FLOORS = 22;
 
     /**
      * Floor constructor
@@ -87,18 +88,17 @@ public class Floor extends Thread {
 
     /**
      * floor's main thread
-     * @param args
      */
     public static void main(String[] args) {
-        Floor[] floors = new Floor[Floor.NUMBER_OF_FLOORS];
+        Floor[] floors = new Floor[NUMBER_OF_FLOORS];
 
-        for (int i = 0; i < Floor.NUMBER_OF_FLOORS; ++i) {
+        for (int i = 0; i < NUMBER_OF_FLOORS; ++i)
             floors[i] = new Floor();
-        }
 
-        for (Floor f : floors) {
+
+        for (Floor f : floors)
             f.start();
-        }
+
 
     }
 }
