@@ -54,6 +54,15 @@ The elevator starts at floor 5 at 5:39pm, travels upwards to floor 6.
 
 
 ### 🔨 BREAKDOWN OF RESPONSIBILITIES
+###### M5
+Mohammed: GUI
+
+Sara: test classes, README.txt file
+
+James: Measured values, timing diagram
+
+Marina: State machine diagrams, UML diagrams
+
 ###### M4
 Mohammed: State machine diagrams, UML diagrams, utilities class
 
