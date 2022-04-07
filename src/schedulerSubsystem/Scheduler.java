@@ -1,6 +1,5 @@
 package schedulerSubsystem;
 
-import main.Floor;
 import main.RequestEvent;
 
 import java.net.SocketException;
@@ -9,7 +8,7 @@ import java.util.LinkedList;
 /**
  * The Scheduler which is used as a communication channel from the Floor thread to the Elevator thread
  *  @author sarashikhhassan, Mohammad Alkhaledi
- *  @version 3.0 (iteration 3)
+ *  @version 5.0 (iteration 5)
  */
 public class Scheduler {
     private LinkedList<RequestEvent> elevatorRequests;
@@ -119,6 +118,7 @@ public class Scheduler {
         ElevatorServer elevatorServer = new ElevatorServer(scheduler);
         elevatorServer.start();
         floorServer.start();
+
     }
 
 
